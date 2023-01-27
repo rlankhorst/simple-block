@@ -76,7 +76,7 @@ function cmplz_documents_rest_route() {
 		'methods'  => 'GET',
 		'callback' => 'cmplz_rest_api_documents',
 		'permission_callback' => function(){
-			return is_user_logged_in();
+			return current_user_can('manage_options');
 		},
 	) );
 }
@@ -91,6 +91,9 @@ function cmplz_documents_rest_route() {
  */
 
 function cmplz_rest_api_documents( WP_REST_Request $request ): array {
+	if (!current_user_can('manage_options')) {
+		return [];
+	}
 	$output    = [];
 	$types = [
 		'Type A',
