@@ -34,6 +34,7 @@ function cmplz_editor_assets() {
 		'cmplz-block',
 		'complianz',
 		array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),//to authenticate the logged in user
 			'site_url' => get_rest_url(),
 			'cmplz_preview' => cmplz_url.  'assets/images/gutenberg-preview.png',
 		)
@@ -74,12 +75,14 @@ function cmplz_documents_rest_route() {
 	register_rest_route( 'complianz/v1', 'documents/', array(
 		'methods'  => 'GET',
 		'callback' => 'cmplz_rest_api_documents',
-		'permission_callback' => '__return_true',
+		'permission_callback' => function(){
+			return is_user_logged_in();
+		},
 	) );
 }
 
 /**
- * Render an array of possible block outputs with title and id.
+ * Render an array of possible block outputs with title and id, called by the rest api
  * The id is used in the block shortcode
  *
  * @param WP_REST_Request $request

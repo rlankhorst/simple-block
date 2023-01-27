@@ -7,5 +7,10 @@ import axios from 'axios';
  * @returns {AxiosPromise<any>}
  */
 export const getDocuments = () => {
-    return axios.get(complianz.site_url+`complianz/v1/documents`);
+    let config = {
+        headers: {
+            'X-WP-Nonce': complianz.nonce,
+        }
+    }
+    return axios.get(complianz.site_url+`complianz/v1/documents`, config);
 };
