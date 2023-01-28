@@ -14,3 +14,14 @@ export const getDocuments = () => {
     }
     return axios.get(complianz.site_url+`complianz/v1/documents`, config);
 };
+
+export const getDocument = (type) => {
+    let config = {
+        headers: {
+            'X-WP-Nonce': complianz.nonce,
+        }
+    }
+    let data = {};
+    data.type = type;
+    return axios.post(complianz.site_url+'complianz/v1/document', data, config ).then( ( response ) => {return response.data;});
+};

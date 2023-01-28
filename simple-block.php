@@ -79,6 +79,25 @@ function cmplz_documents_rest_route() {
 			return current_user_can('manage_options');
 		},
 	) );
+
+	register_rest_route( 'complianz/v1', 'document/', array(
+		'methods'  => 'POST',
+		'callback' => 'cmplz_rest_api_document',
+		'permission_callback' => function(){
+			return current_user_can('manage_options');
+		},
+	) );
+}
+
+/**
+ * Get the html through the rest api
+ * @param WP_REST_Request $request
+ *
+ * @return string
+ */
+function cmplz_rest_api_document(WP_REST_Request $request):string {
+	$type = $request->get_param('type');
+	return cmplz_render_shortcode($type);
 }
 
 /**
@@ -96,15 +115,14 @@ function cmplz_rest_api_documents( WP_REST_Request $request ): array {
 	}
 	$output    = [];
 	$types = [
-		'Type A',
-		'Type B',
+		'a' => 'Type A',
+		'b' => 'Type B',
 	];
 
-	foreach ( $types as $type ) {
+	foreach ( $types as $id => $type ) {
 		$output[] = [
-			'id'      => $type,
+			'id'      => $id,
 			'title'   => $type,
-			'content' => cmplz_render_shortcode( $type ),
 		];
 	}
 
